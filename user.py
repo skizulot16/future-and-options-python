@@ -1,16 +1,19 @@
 import csv
+import pandas as pd
 class user:
     stocks=[]
-    def __init__(self):
-        self.username=input('Username=')
-        self.passw=input('password=')
-        uf=open('new.csv','r')
-        cr=csv.reader(uf)
+    def __init__(self,username,passw):
+        self.username=username
+        self.passw=passw
+        self.uf=open('new.csv','r')
+        self.cr=csv.DictReader(self.uf)
+      
+
         check=0
-        for i in cr:
-            if(i[0]==self.username):
+        for i in self.cr:
+            if(i['Username']==self.username):
                 check+=1
-                if(i[1]==self.passw):
+                if(i['Password']==self.passw):
                     check+=1
                     print("LOGINNED SUCCESFUULY")
             
@@ -23,7 +26,9 @@ class user:
                 user.createuser(self)
                 
             elif(self.temp==2):
-                user.__init__(self)
+                temp_user=input('username=')
+                temp_pass=input('password=')
+                user.__init__(self,temp_user,temp_pass)
             else:
                 print("THEEK HAI BHAI")
                 exit()
@@ -31,18 +36,22 @@ class user:
             print('Password invalid Try again?')
             self.temp=(input('Choice(yes/no)='))
             if(self.temp=='yes'):
-                user.__init__(self)
+                temp_user=input('username=')
+                temp_pass=input('password=')
+                user.__init__(self,temp_user,temp_pass)
+                
             else:
                 print("THEEK HAI BHAI")
                 exit()
             
     def createuser(self):
         self.newuser=input('Username=')
-        uf=open('new.csv','r')
-        cr=csv.reader(uf)
+        self.uf=open('new.csv','r')
+        self.cr=csv.DictReader(self.uf)
         self.check=0
-        for i in cr:
-            if(i[0]==self.newuser):
+        for i in self.cr:
+            
+            if(i['Username']==self.newuser):
                 self.check+=1
         if(self.check==1):
             print('This username already exists')
@@ -53,6 +62,20 @@ class user:
             uf=open('new.csv','a',newline='')
             cw=csv.writer(uf)
             cw.writerow([self.newuser,self.newpass,self.newbal])
-            
-#u1=user('user2','pass2')
+    def getbalance(self):
+        self.filvar=open('new.csv','r')
+        self.csvar=csv.DictReader(self.filvar)
+        for j in self.csvar:
+            if(j['Username']==self.username):
+                return j['Balance']
+    def changepass(self):
+        csvread=pd.read_csv('new.csv')
+        rowindex=csvread.loc[csvread['Username']==self.username].index[0]
+        csvread.loc[rowindex,'Password']=input('New Password=')
+        csvread.to_csv('new.csv',index=False)
+
+#user_name=input('username=')
+#pass_word=input('password=')
+#u1=user(user_name,pass_word)
+#u1.changepass()
 #u1.createuser()

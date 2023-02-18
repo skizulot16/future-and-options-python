@@ -1,6 +1,8 @@
 from user import *
 from stockcode import *
-newuser=user()
+username=input('Username=')
+password=input('Password=')
+newuser=user(username,password)
     
 print('''==========WELCOME TO BULLS BOARD===============
 Games available:
