@@ -1,14 +1,13 @@
+
 from user import *
 from stockcode import *
-username=input('Username=')
-password=input('Password=')
-newuser=user(username,password)
 
 
 
 
 class drivercode:
     list_of_players={}
+    player_bullchips={}
     def __init__(self,userobj,l_o_s):
         print('''==========WELCOME TO BULLS BOARD===============
 Games available:
@@ -73,7 +72,8 @@ Games available:
                                 print('BULLCHIPS INsUFFIcient')
                     self.cont=int(input('1.Finish portfolio or 2.buy more'))
                     if(self.cont==1):
-                        
+                        drivercode.player_bullchips[self.userobj.username]=self.bullchips
+
                         break
                 for i in drivercode.list_of_players[self.userobj.username]:
                     print(i)
@@ -89,13 +89,24 @@ Games available:
         for i in self.l_o_s:
                 print(i.name,round(i.iprice,2))
     def updated_portfolio(self):
-        for i in drivercode.list_of_players[self.userobj.username]:
-                    for j in self.l_o_s:
-                        if(j.name==i[0]):
-                            self.bullchips+=j.iprice*i[1]
-        print(round(self.bullchips),2)
-
+        for ite in drivercode.player_bullchips:
+            for i in drivercode.list_of_players[ite]:
+                for j in self.l_o_s:
+                    if(j.name==i[0]):
+                        drivercode.player_bullchips[ite]+=j.iprice*i[1]
         
-maingame=drivercode(newuser,list_of_stocks)
-maingame.simulator_run()
-maingame.updated_portfolio()
+    def leaderboard(self):
+        for i,j in (drivercode.player_bullchips.items()):
+            print(i,round(j,2))
+
+for i in range(3):
+    if(i<2):
+        username=input('Username=')
+        password=input('Password=')
+        newuser=user(username,password)
+        maingame=drivercode(newuser,list_of_stocks)
+        
+    else:
+        maingame.simulator_run()
+        maingame.updated_portfolio()
+        maingame.leaderboard()
