@@ -85,8 +85,23 @@ class user:
         rowindex=csvread.loc[csvread['Username']==self.username].index[0]
         csvread.loc[rowindex,'Balance']=user.getbalance(self)+self.tran_money
         csvread.to_csv('new.csv',index=False)
-
-
+class bot:
+    def __init__(self,botname):
+        self.botname=botname
+    def getbalance(self):
+        self.filvar=open('new.csv','r')
+        self.csvar=csv.DictReader(self.filvar)
+        for j in self.csvar:
+            if(j['Username']==self.botname):
+                return float(j['Balance'])
+                self.filvar.close()
+    def changebal(self,tran_money):
+        self.tran_money=tran_money
+        csvread=pd.read_csv('new.csv')
+        rowindex=csvread.loc[csvread['Username']==self.botname].index[0]
+        csvread.loc[rowindex,'Balance']=bot.getbalance(self)+self.tran_money
+        csvread.to_csv('new.csv',index=False)
+        
 #user_name=input('username=')
 #pass_word=input('password=')
 #u1=user(user_name,pass_word)
